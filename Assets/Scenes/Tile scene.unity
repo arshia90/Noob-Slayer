@@ -360,14 +360,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1009200408}
-  m_LocalRotation: {x: 0, y: -1, z: 0, w: 0}
-  m_LocalPosition: {x: 4.69, y: 14.88, z: 31.9}
+  m_LocalRotation: {x: -0, y: -0.7981148, z: 0.60250545, w: 0}
+  m_LocalPosition: {x: 4.69, y: 62.91, z: 20.4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: -180, z: 0}
+  m_LocalEulerAnglesHint: {x: 74.099, y: -180, z: 0}
 --- !u!114 &1009200412
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -915,6 +915,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1218141252}
   - component: {fileID: 1218141251}
+  - component: {fileID: 1218141253}
+  - component: {fileID: 1218141254}
   m_Layer: 0
   m_Name: Mover
   m_TagString: Untagged
@@ -929,7 +931,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1218141250}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dd839a2b4f1057a46bb24e070347650c, type: 3}
   m_Name: 
@@ -952,6 +954,38 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1218141253
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218141250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c9d5b810c1b32946ab1c55d728e00f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tilemap: {fileID: 1068159474}
+  cube: {fileID: 1218978924}
+  width: 6
+  height: 6
+  moveSpeed: 5
+--- !u!114 &1218141254
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218141250}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfade10a7fd214c4dacfde07a04666ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  indexer: {fileID: 1218141253}
+  player: {fileID: 1218978924}
+  spawnIndex: 15
 --- !u!1 &1218978920
 GameObject:
   m_ObjectHideFlags: 0
