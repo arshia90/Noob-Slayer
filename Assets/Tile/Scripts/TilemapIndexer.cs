@@ -177,4 +177,9 @@ public class TilemapIndexer : MonoBehaviour
             yield return null;
         }
     }
+    public System.Collections.Generic.List<Vector3Int> FindPathPublic(Vector3Int start, Vector3Int target)
+{
+    return FindPath(start, target);
+}
+
 }
