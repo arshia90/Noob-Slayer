@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using System.Collections;
+using System.Collections.Generic;
 
 public class TilemapIndexer : MonoBehaviour
 {
@@ -52,8 +53,6 @@ public class TilemapIndexer : MonoBehaviour
     public Vector3Int GetCellFromIndex(int index)
     {
         int maxIndex = width * height;
-
-        // محدود کردن
         index = Mathf.Clamp(index, 1, maxIndex);
 
         index -= 1;
@@ -70,54 +69,99 @@ public class TilemapIndexer : MonoBehaviour
         );
     }
 
-    // 🚶 حرکت پله‌ای
+    // 🚶 شروع حرکت
     public void MoveStepByStep(int targetIndex)
     {
         int maxIndex = width * height;
-
-        // محدود کردن
         targetIndex = Mathf.Clamp(targetIndex, 1, maxIndex);
 
         StopAllCoroutines();
         StartCoroutine(MoveRoutine(targetIndex));
     }
 
+    // 🧠 حرکت با مسیر‌یابی
     IEnumerator MoveRoutine(int targetIndex)
     {
-        Vector3Int currentCell = tilemap.WorldToCell(cube.position);
+        Vector3Int startCell = tilemap.WorldToCell(cube.position);
         Vector3Int targetCell = GetCellFromIndex(targetIndex);
 
         // ❌ اگر مقصد Tile نداشت
         if (!tilemap.HasTile(targetCell))
         {
-            Debug.Log("maghsad vojod nadard");
+            Debug.Log("Tile مقصد وجود ندارد!");
             yield break;
         }
 
-        while (currentCell != targetCell)
+        List<Vector3Int> path = FindPath(startCell, targetCell);
+
+        if (path == null)
         {
-            // حرکت مورب
-            if (currentCell.x < targetCell.x)
-                currentCell.x += 1;
-            else if (currentCell.x > targetCell.x)
-                currentCell.x -= 1;
+            Debug.Log("مسیر پیدا نشد!");
+            yield break;
+        }
 
-            if (currentCell.y < targetCell.y)
-                currentCell.y += 1;
-            else if (currentCell.y > targetCell.y)
-                currentCell.y -= 1;
-
-            // ❌ اگر مسیر Tile نداشت
-            if (!tilemap.HasTile(currentCell))
-            {
-                Debug.Log("masir ghat shode");
-                yield break;
-            }
-
-            Vector3 worldPos = tilemap.GetCellCenterWorld(currentCell);
-
+        foreach (var cell in path)
+        {
+            Vector3 worldPos = tilemap.GetCellCenterWorld(cell);
             yield return StartCoroutine(SmoothMove(worldPos));
         }
+    }
+
+    // 🔍 پیدا کردن مسیر (BFS)
+    List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
+    {
+        Queue<Vector3Int> queue = new Queue<Vector3Int>();
+        Dictionary<Vector3Int, Vector3Int> cameFrom = new Dictionary<Vector3Int, Vector3Int>();
+
+        queue.Enqueue(start);
+        cameFrom[start] = start;
+
+        Vector3Int[] directions = new Vector3Int[]
+        {
+            Vector3Int.right,
+            Vector3Int.left,
+            new Vector3Int(0,1,0),
+            new Vector3Int(0,-1,0)
+        };
+
+        while (queue.Count > 0)
+        {
+            Vector3Int current = queue.Dequeue();
+
+            if (current == target)
+                break;
+
+            foreach (var dir in directions)
+            {
+                Vector3Int next = current + dir;
+
+                if (!tilemap.HasTile(next))
+                    continue;
+
+                if (cameFrom.ContainsKey(next))
+                    continue;
+
+                queue.Enqueue(next);
+                cameFrom[next] = current;
+            }
+        }
+
+        // ❌ مسیر پیدا نشد
+        if (!cameFrom.ContainsKey(target))
+            return null;
+
+        // ساخت مسیر
+        List<Vector3Int> path = new List<Vector3Int>();
+        Vector3Int temp = target;
+
+        while (temp != start)
+        {
+            path.Add(temp);
+            temp = cameFrom[temp];
+        }
+
+        path.Reverse();
+        return path;
     }
 
     // 🎬 حرکت نرم
@@ -133,4 +177,9 @@ public class TilemapIndexer : MonoBehaviour
             yield return null;
         }
     }
+    public System.Collections.Generic.List<Vector3Int> FindPathPublic(Vector3Int start, Vector3Int target)
+{
+    return FindPath(start, target);
+}
+
 }
