@@ -38,7 +38,7 @@ public class TilemapIndexer : MonoBehaviour
         }
     }
 
-    // 🔢 Cell → Index
+    // 🔢 Cell → Index (بالا راست = 1)
     int GetIndex(Vector3Int cellPos)
     {
         int x = cellPos.x - tilemap.cellBounds.xMin;
@@ -79,13 +79,12 @@ public class TilemapIndexer : MonoBehaviour
         StartCoroutine(MoveRoutine(targetIndex));
     }
 
-    // 🧠 حرکت با مسیر‌یابی
+    // 🧠 حرکت با Pathfinding
     IEnumerator MoveRoutine(int targetIndex)
     {
         Vector3Int startCell = tilemap.WorldToCell(cube.position);
         Vector3Int targetCell = GetCellFromIndex(targetIndex);
 
-        // ❌ اگر مقصد Tile نداشت
         if (!tilemap.HasTile(targetCell))
         {
             Debug.Log("Tile مقصد وجود ندارد!");
@@ -107,7 +106,7 @@ public class TilemapIndexer : MonoBehaviour
         }
     }
 
-    // 🔍 پیدا کردن مسیر (BFS)
+    // 🔍 Pathfinding با حرکت مورب
     List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
     {
         Queue<Vector3Int> queue = new Queue<Vector3Int>();
@@ -118,10 +117,17 @@ public class TilemapIndexer : MonoBehaviour
 
         Vector3Int[] directions = new Vector3Int[]
         {
+            // مستقیم
             Vector3Int.right,
             Vector3Int.left,
             new Vector3Int(0,1,0),
-            new Vector3Int(0,-1,0)
+            new Vector3Int(0,-1,0),
+
+            // مورب
+            new Vector3Int(1,1,0),
+            new Vector3Int(-1,1,0),
+            new Vector3Int(1,-1,0),
+            new Vector3Int(-1,-1,0)
         };
 
         while (queue.Count > 0)
@@ -146,11 +152,9 @@ public class TilemapIndexer : MonoBehaviour
             }
         }
 
-        // ❌ مسیر پیدا نشد
         if (!cameFrom.ContainsKey(target))
             return null;
 
-        // ساخت مسیر
         List<Vector3Int> path = new List<Vector3Int>();
         Vector3Int temp = target;
 
@@ -177,9 +181,10 @@ public class TilemapIndexer : MonoBehaviour
             yield return null;
         }
     }
-    public System.Collections.Generic.List<Vector3Int> FindPathPublic(Vector3Int start, Vector3Int target)
-{
-    return FindPath(start, target);
-}
 
+    // 📡 برای UI
+    public List<Vector3Int> FindPathPublic(Vector3Int start, Vector3Int target)
+    {
+        return FindPath(start, target);
+    }
 }
