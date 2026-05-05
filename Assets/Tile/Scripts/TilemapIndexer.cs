@@ -37,6 +37,7 @@ public class TilemapIndexer : MonoBehaviour
         }
     }
 
+    // 🔢 Cell → Index
     int GetIndex(Vector3Int cellPos)
     {
         int x = cellPos.x - tilemap.cellBounds.xMin;
@@ -47,8 +48,14 @@ public class TilemapIndexer : MonoBehaviour
         return y * width + invertedX + 1;
     }
 
+    // 🔄 Index → Cell
     public Vector3Int GetCellFromIndex(int index)
     {
+        int maxIndex = width * height;
+
+        // محدود کردن
+        index = Mathf.Clamp(index, 1, maxIndex);
+
         index -= 1;
 
         int y = index / width;
@@ -63,8 +70,14 @@ public class TilemapIndexer : MonoBehaviour
         );
     }
 
+    // 🚶 حرکت پله‌ای
     public void MoveStepByStep(int targetIndex)
     {
+        int maxIndex = width * height;
+
+        // محدود کردن
+        targetIndex = Mathf.Clamp(targetIndex, 1, maxIndex);
+
         StopAllCoroutines();
         StartCoroutine(MoveRoutine(targetIndex));
     }
@@ -74,17 +87,32 @@ public class TilemapIndexer : MonoBehaviour
         Vector3Int currentCell = tilemap.WorldToCell(cube.position);
         Vector3Int targetCell = GetCellFromIndex(targetIndex);
 
+        // ❌ اگر مقصد Tile نداشت
+        if (!tilemap.HasTile(targetCell))
+        {
+            Debug.Log("maghsad vojod nadard");
+            yield break;
+        }
+
         while (currentCell != targetCell)
         {
+            // حرکت مورب
             if (currentCell.x < targetCell.x)
                 currentCell.x += 1;
             else if (currentCell.x > targetCell.x)
                 currentCell.x -= 1;
 
-            else if (currentCell.y < targetCell.y)
+            if (currentCell.y < targetCell.y)
                 currentCell.y += 1;
             else if (currentCell.y > targetCell.y)
                 currentCell.y -= 1;
+
+            // ❌ اگر مسیر Tile نداشت
+            if (!tilemap.HasTile(currentCell))
+            {
+                Debug.Log("masir ghat shode");
+                yield break;
+            }
 
             Vector3 worldPos = tilemap.GetCellCenterWorld(currentCell);
 
@@ -92,6 +120,7 @@ public class TilemapIndexer : MonoBehaviour
         }
     }
 
+    // 🎬 حرکت نرم
     IEnumerator SmoothMove(Vector3 target)
     {
         Vector3 start = cube.position;
