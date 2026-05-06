@@ -34,6 +34,8 @@ public class TilemapIndexer : MonoBehaviour
                 Vector3Int cell = tilemap.WorldToCell(hit.point);
                 int index = GetIndex(cell);
 
+                Debug.Log($"<color=yellow>Clicked Cell:</color> {cell} | <color=cyan>Index Number:</color> {index}");
+
                 TryMove(index);
             }
         }
