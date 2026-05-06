@@ -13,6 +13,8 @@ public class TilemapIndexer : MonoBehaviour
 
     public float moveSpeed = 5f;
 
+    bool isMoving = false;
+
     void Update()
     {
         HandleMouse();
@@ -28,17 +30,14 @@ public class TilemapIndexer : MonoBehaviour
             if (Physics.Raycast(ray, out hit))
             {
                 Vector3Int cell = tilemap.WorldToCell(hit.point);
-
                 int index = GetIndex(cell);
 
-                Debug.Log("Index: " + index);
-
-                MoveStepByStep(index);
+                TryMove(index);
             }
         }
     }
 
-    // 🔢 Cell → Index (بالا راست = 1)
+    // 🔢 Cell → Index
     int GetIndex(Vector3Int cellPos)
     {
         int x = cellPos.x - tilemap.cellBounds.xMin;
@@ -69,44 +68,49 @@ public class TilemapIndexer : MonoBehaviour
         );
     }
 
-    // 🚶 شروع حرکت
-    public void MoveStepByStep(int targetIndex)
+    // 🚶 حرکت امن
+    void TryMove(int targetIndex)
     {
         int maxIndex = width * height;
         targetIndex = Mathf.Clamp(targetIndex, 1, maxIndex);
 
-        StopAllCoroutines();
-        StartCoroutine(MoveRoutine(targetIndex));
-    }
-
-    // 🧠 حرکت با Pathfinding
-    IEnumerator MoveRoutine(int targetIndex)
-    {
-        Vector3Int startCell = tilemap.WorldToCell(cube.position);
+        Vector3Int currentCell = tilemap.WorldToCell(cube.position);
         Vector3Int targetCell = GetCellFromIndex(targetIndex);
 
+        // ❌ روی خودش
+        if (currentCell == targetCell)
+            return;
+
+        // ❌ Tile مقصد وجود ندارد
         if (!tilemap.HasTile(targetCell))
-        {
-            Debug.Log("Tile مقصد وجود ندارد!");
-            yield break;
-        }
+            return;
 
-        List<Vector3Int> path = FindPath(startCell, targetCell);
+        // 🔍 اول مسیر رو پیدا کن
+        List<Vector3Int> path = FindPath(currentCell, targetCell);
 
-        if (path == null)
-        {
-            Debug.Log("مسیر پیدا نشد!");
-            yield break;
-        }
+        if (path == null || path.Count == 0)
+            return;
+
+        // ✅ حالا حرکت رو شروع کن
+        StopAllCoroutines();
+        StartCoroutine(MoveRoutine(path));
+    }
+
+    // 🧠 حرکت
+    IEnumerator MoveRoutine(List<Vector3Int> path)
+    {
+        isMoving = true;
 
         foreach (var cell in path)
         {
             Vector3 worldPos = tilemap.GetCellCenterWorld(cell);
             yield return StartCoroutine(SmoothMove(worldPos));
         }
+
+        isMoving = false;
     }
 
-    // 🔍 Pathfinding با حرکت مورب
+    // 🔍 Pathfinding (با مورب + جلوگیری از باگ)
     List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
     {
         Queue<Vector3Int> queue = new Queue<Vector3Int>();
@@ -117,13 +121,11 @@ public class TilemapIndexer : MonoBehaviour
 
         Vector3Int[] directions = new Vector3Int[]
         {
-            // مستقیم
             Vector3Int.right,
             Vector3Int.left,
             new Vector3Int(0,1,0),
             new Vector3Int(0,-1,0),
 
-            // مورب
             new Vector3Int(1,1,0),
             new Vector3Int(-1,1,0),
             new Vector3Int(1,-1,0),
@@ -143,6 +145,16 @@ public class TilemapIndexer : MonoBehaviour
 
                 if (!tilemap.HasTile(next))
                     continue;
+
+                // ❌ جلوگیری از رد شدن از گوشه
+                if (dir.x != 0 && dir.y != 0)
+                {
+                    Vector3Int side1 = new Vector3Int(current.x + dir.x, current.y, 0);
+                    Vector3Int side2 = new Vector3Int(current.x, current.y + dir.y, 0);
+
+                    if (!tilemap.HasTile(side1) || !tilemap.HasTile(side2))
+                        continue;
+                }
 
                 if (cameFrom.ContainsKey(next))
                     continue;
@@ -168,7 +180,7 @@ public class TilemapIndexer : MonoBehaviour
         return path;
     }
 
-    // 🎬 حرکت نرم
+    // 🎬 حرکت نرم + فیکس نهایی
     IEnumerator SmoothMove(Vector3 target)
     {
         Vector3 start = cube.position;
@@ -180,11 +192,13 @@ public class TilemapIndexer : MonoBehaviour
             cube.position = Vector3.Lerp(start, target + new Vector3(0, 0.5f, 0), t);
             yield return null;
         }
-    }
 
-    // 📡 برای UI
-    public List<Vector3Int> FindPathPublic(Vector3Int start, Vector3Int target)
-    {
-        return FindPath(start, target);
+        // 👇 خیلی مهم
+        cube.position = target + new Vector3(0, 0.5f, 0);
     }
+    public List<Vector3Int> FindPathPublic(Vector3Int start, Vector3Int target)
+{
+    return FindPath(start, target);
+}
+
 }

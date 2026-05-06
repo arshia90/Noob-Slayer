@@ -1,4 +1,4 @@
-using UnityEngine;
+ using UnityEngine;
 using UnityEngine.UI;
 // اگر TextMeshPro داری:
 // using TMPro;
