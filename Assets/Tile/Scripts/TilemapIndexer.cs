@@ -8,6 +8,8 @@ public class TilemapIndexer : MonoBehaviour
     public Tilemap tilemap;
     public Transform cube;
 
+    public CommonAttribute stats; // 👈 فقط این مهمه
+
     public int width = 6;
     public int height = 6;
 
@@ -37,7 +39,6 @@ public class TilemapIndexer : MonoBehaviour
         }
     }
 
-    // 🔢 Cell → Index
     int GetIndex(Vector3Int cellPos)
     {
         int x = cellPos.x - tilemap.cellBounds.xMin;
@@ -48,7 +49,6 @@ public class TilemapIndexer : MonoBehaviour
         return y * width + invertedX + 1;
     }
 
-    // 🔄 Index → Cell
     public Vector3Int GetCellFromIndex(int index)
     {
         int maxIndex = width * height;
@@ -68,7 +68,6 @@ public class TilemapIndexer : MonoBehaviour
         );
     }
 
-    // 🚶 حرکت امن
     void TryMove(int targetIndex)
     {
         int maxIndex = width * height;
@@ -77,26 +76,32 @@ public class TilemapIndexer : MonoBehaviour
         Vector3Int currentCell = tilemap.WorldToCell(cube.position);
         Vector3Int targetCell = GetCellFromIndex(targetIndex);
 
-        // ❌ روی خودش
         if (currentCell == targetCell)
             return;
 
-        // ❌ Tile مقصد وجود ندارد
         if (!tilemap.HasTile(targetCell))
             return;
 
-        // 🔍 اول مسیر رو پیدا کن
         List<Vector3Int> path = FindPath(currentCell, targetCell);
 
         if (path == null || path.Count == 0)
             return;
 
-        // ✅ حالا حرکت رو شروع کن
+        // 🔥 محدودیت با ActionPoints
+        if (stats != null)
+        {
+            int maxSteps = stats.ActionPoints;
+
+            if (path.Count > maxSteps)
+            {
+                path = path.GetRange(0, maxSteps);
+            }
+        }
+
         StopAllCoroutines();
         StartCoroutine(MoveRoutine(path));
     }
 
-    // 🧠 حرکت
     IEnumerator MoveRoutine(List<Vector3Int> path)
     {
         isMoving = true;
@@ -107,10 +112,18 @@ public class TilemapIndexer : MonoBehaviour
             yield return StartCoroutine(SmoothMove(worldPos));
         }
 
+        // 🔥 کم کردن ActionPoints
+        if (stats != null)
+        {
+            stats.ActionPoints -= path.Count;
+
+            if (stats.ActionPoints < 0)
+                stats.ActionPoints = 0;
+        }
+
         isMoving = false;
     }
 
-    // 🔍 Pathfinding (با مورب + جلوگیری از باگ)
     List<Vector3Int> FindPath(Vector3Int start, Vector3Int target)
     {
         Queue<Vector3Int> queue = new Queue<Vector3Int>();
@@ -146,7 +159,6 @@ public class TilemapIndexer : MonoBehaviour
                 if (!tilemap.HasTile(next))
                     continue;
 
-                // ❌ جلوگیری از رد شدن از گوشه
                 if (dir.x != 0 && dir.y != 0)
                 {
                     Vector3Int side1 = new Vector3Int(current.x + dir.x, current.y, 0);
@@ -180,7 +192,6 @@ public class TilemapIndexer : MonoBehaviour
         return path;
     }
 
-    // 🎬 حرکت نرم + فیکس نهایی
     IEnumerator SmoothMove(Vector3 target)
     {
         Vector3 start = cube.position;
@@ -193,12 +204,10 @@ public class TilemapIndexer : MonoBehaviour
             yield return null;
         }
 
-        // 👇 خیلی مهم
         cube.position = target + new Vector3(0, 0.5f, 0);
     }
     public List<Vector3Int> FindPathPublic(Vector3Int start, Vector3Int target)
 {
     return FindPath(start, target);
 }
-
 }

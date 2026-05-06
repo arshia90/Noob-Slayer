@@ -9,8 +9,6 @@ public class UIManager : MonoBehaviour
     public Transform player;
 
     public Text stepText;
-    // اگر TMP:
-    // public TMP_Text stepText;
 
     void Update()
     {
