@@ -19,7 +19,7 @@ public class PlayerSpawner : MonoBehaviour
         // محدود کردن
         index = Mathf.Clamp(index, 1, maxIndex);
 
-        Vector3Int cell = indexer.GetCellFromIndex(index);
+        Vector3Int cell = indexer.GetCellFromIndex(index);  
 
         // ❌ اگر Tile نداشت
         if (!indexer.tilemap.HasTile(cell))

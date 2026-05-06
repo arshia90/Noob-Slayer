@@ -1092,6 +1092,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilemap: {fileID: 1068159474}
   cube: {fileID: 1218978924}
+  stats: {fileID: 1218978925}
   width: 6
   height: 6
   moveSpeed: 1
@@ -1238,7 +1239,7 @@ MonoBehaviour:
   Hp: 100
   Mana: 100
   Armor: 80
-  ActionPoints: 10
+  ActionPoints: 4
   Xp: 100
 --- !u!1 &1348626897
 GameObject:

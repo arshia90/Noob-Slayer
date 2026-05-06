@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public  class CommonAttribute : MonoBehaviour
+public class CommonAttribute : MonoBehaviour
 {
     public int Hp;
 
