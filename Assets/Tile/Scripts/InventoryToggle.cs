@@ -2,13 +2,13 @@ using UnityEngine;
 
 public class InventoryToggle : MonoBehaviour
 {
-    public GameObject inventoryPanel; // اینجا باید همان Slots یا کانوست رو درگ کنی
+    public GameObject inventoryPanel; // inja gameobject slots r drag mikonim.
 
     public void ToggleInventory()
     {
         if (inventoryPanel != null)
         {
-            // اگر فعال بود غیرفعال میکنه، اگر غیرفعال بود فعال میکنه
+            //age faal bood gheire faal mikone,Ya baraks.
             bool isActive = inventoryPanel.activeSelf;
             inventoryPanel.SetActive(!isActive);
         }

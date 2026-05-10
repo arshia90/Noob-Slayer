@@ -6,10 +6,11 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
 {
     public ItemType type; 
     
-    // این والدی است که آیتم بعد از درگ باید در آن قرار بگیرد
+    //in parenti hast ke item bad az drag bayad dar un gharar begire.
     [HideInInspector] public Transform parentAfterDrag; 
     
-    // ما نیاز داریم اسلات اصلی را هم همیشه ذخیره داشته باشیم
+    
+    //bayad slot asli ro hamishe zakhire dashte bashim.
     private Transform originalSlot; 
     private CanvasGroup canvasGroup;
 
@@ -18,14 +19,16 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     }
 
     public void OnBeginDrag(PointerEventData eventData) {
-        // ۱. ذخیره اسلات فعلی به عنوان والد اصلی
+        
+        // 1.Save slot feli be onvan valed asli
         originalSlot = transform.parent;
         
-        // ۲. به صورت پیش‌فرض، مقصد را همان اسلات اصلی قرار می‌دهیم
+       
+        //2. be sorat pish farz, maghsad ra hamoon slot asli gharar midim.
         parentAfterDrag = originalSlot; 
         
-        // ۳. جدا کردن از اسلات برای اینکه روی بقیه اسلات‌ها حرکت کند
-        // ما این والد را به والدِ والد (یعنی Slots) تغییر می‌دهیم تا هم جلوی همه باشد و هم مختصاتش دیوانه نشود
+        //3.joda kardan az slot baraye inke betone ruye baghie slot ha harekat kone 
+        //va inke jeloye hame bashe.
         transform.SetParent(transform.parent.parent); 
         transform.SetAsLastSibling();
         
@@ -37,10 +40,11 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     }
 
     public void OnEndDrag(PointerEventData eventData) {
-        // ۴. بازگشت به والدی که نهایتاً برایش تعیین شده (یا اسلات قبلی یا اسلات جدید)
+       
+        //4.bazgasht be valedi ke nahayatan barash taeen shode (Ba slot ghabli ya jadid)
         transform.SetParent(parentAfterDrag);
         
-        // ۵. ریست کردن موقعیت برای قرارگیری دقیق در مرکز اسلات
+        //5.Reset kardan mogheiat baraye gharar giri daghigh dar markaz slot
         transform.localPosition = Vector3.zero;
         
         canvasGroup.blocksRaycasts = true;

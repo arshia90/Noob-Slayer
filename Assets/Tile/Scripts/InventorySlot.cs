@@ -6,27 +6,29 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     public ItemType allowedType;
 
     public void OnDrop(PointerEventData eventData) {
-        // پیدا کردن آیتمی که در حال درگ شدن است
+        //peida kardan itemi ke dar hale drag shodan ast.
         InventoryItem newItem = eventData.pointerDrag.GetComponent<InventoryItem>();
 
         if (newItem != null) {
-            // ۱. اول چک می‌کنیم که آیا نوع آیتم به این اسلات می‌خورد یا نه
+        
+            // 1. aval check mikonim ke aya type item be in slot mikhore ya na.
             if (newItem.type == allowedType) {
 
-                // ۲. چک می‌کنیم: آیا اسلات خالی است؟
+                // 2.check mikonim aya slot khali hast ya na?
                 if (transform.childCount == 0) {
                     newItem.parentAfterDrag = transform;
                 }
-                // ۳. اگر اسلات پر بود، عملیات تعویض (Swap) را انجام می‌دهیم
-                else {
-                    // آیتمی که همین الان داخل اسلات هست را پیدا کن
+                // 3.agar slot por bood,amaliat taviz (Swap) ra anjam midim.
+                else 
+                {
+                    // itemi ke hamin alan dakhel slot hast ra por kon.
                     Transform currentItemInSlot = transform.GetChild(0);
                     
-                    // جای آیتم قدیمی را با جای قبلیِ آیتم جدید عوض کن
+                    // jaye item ghadimi ro ba jaye ghabli item jadid avaz kon.
                     currentItemInSlot.SetParent(newItem.parentAfterDrag);
                     currentItemInSlot.localPosition = Vector3.zero;
 
-                    // حالا آیتم جدید را در این اسلات بنشان
+                    // hala item ro dar in slot benshon
                     newItem.parentAfterDrag = transform;
                 }
             }

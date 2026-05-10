@@ -38,7 +38,6 @@ public class GridGenerator : MonoBehaviour
         // 2. حالا به صورت تصادفی بعضی‌ها را خالی (null) کن
         RandomlyRemoveTiles();
         
-        Debug.Log("✅ نقشه با فضاهای خالی ایجاد شد.");
     }
 
     void FillAllInternalWithFloor()
