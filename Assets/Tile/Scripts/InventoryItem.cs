@@ -7,18 +7,19 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     public ItemType type; 
     
     //in parenti hast ke item bad az drag bayad dar un gharar begire.
-    [HideInInspector] public Transform parentAfterDrag; 
-    
+    [HideInInspector] public Transform parentAfterDrag;
     
     //bayad slot asli ro hamishe zakhire dashte bashim.
-    private Transform originalSlot; 
+    private Transform originalSlot;
     private CanvasGroup canvasGroup;
 
-    private void Awake() {
+    private void Awake()
+    {
         canvasGroup = GetComponent<CanvasGroup>();
     }
 
-    public void OnBeginDrag(PointerEventData eventData) {
+    public void OnBeginDrag(PointerEventData eventData) 
+    {
         
         // 1.Save slot feli be onvan valed asli
         originalSlot = transform.parent;
@@ -35,11 +36,13 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         canvasGroup.blocksRaycasts = false;
     }
 
-    public void OnDrag(PointerEventData eventData) {
+    public void OnDrag(PointerEventData eventData)
+    {
         transform.position = eventData.position;
     }
 
-    public void OnEndDrag(PointerEventData eventData) {
+    public void OnEndDrag(PointerEventData eventData) 
+    {
        
         //4.bazgasht be valedi ke nahayatan barash taeen shode (Ba slot ghabli ya jadid)
         transform.SetParent(parentAfterDrag);

@@ -5,17 +5,21 @@ public class InventorySlot : MonoBehaviour, IDropHandler
 {
     public ItemType allowedType;
 
-    public void OnDrop(PointerEventData eventData) {
+    public void OnDrop(PointerEventData eventData) 
+    {
         //peida kardan itemi ke dar hale drag shodan ast.
         InventoryItem newItem = eventData.pointerDrag.GetComponent<InventoryItem>();
 
-        if (newItem != null) {
+        if (newItem != null) 
+        {
         
             // 1. aval check mikonim ke aya type item be in slot mikhore ya na.
-            if (newItem.type == allowedType) {
+            if (newItem.type == allowedType)
+            {
 
                 // 2.check mikonim aya slot khali hast ya na?
-                if (transform.childCount == 0) {
+                if (transform.childCount == 0)
+                {
                     newItem.parentAfterDrag = transform;
                 }
                 // 3.agar slot por bood,amaliat taviz (Swap) ra anjam midim.
