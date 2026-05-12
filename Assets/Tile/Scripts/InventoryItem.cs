@@ -13,11 +13,20 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     private Transform originalSlot;
     private CanvasGroup canvasGroup;   
 
+    private Vector2 originalSize;
+    private RectTransform rectTransform;
+
     private void Awake()
     {
         canvasGroup = GetComponent<CanvasGroup>();
+        rectTransform = GetComponent<RectTransform>();
+       
     }
-
+    
+    private void Start()
+    {
+        originalSize = GetComponent<RectTransform>().sizeDelta;
+    }
     public void OnBeginDrag(PointerEventData eventData) 
     {
         
@@ -34,6 +43,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.SetAsLastSibling();
         
         canvasGroup.blocksRaycasts = false;
+
+        rectTransform.sizeDelta = originalSize;
     }
 
     public void OnDrag(PointerEventData eventData)
@@ -51,5 +62,8 @@ public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
         transform.localPosition = Vector3.zero;
         
         canvasGroup.blocksRaycasts = true;
+
+
+        rectTransform.sizeDelta = originalSize;
     }
 }

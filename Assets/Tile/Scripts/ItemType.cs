@@ -6,5 +6,7 @@ using UnityEngine;
     Weapon,
     Ring,
     Head,
-    Body
+    Body,
+
+    None
 }

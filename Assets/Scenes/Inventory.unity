@@ -989,6 +989,7 @@ GameObject:
   - component: {fileID: 151992249}
   - component: {fileID: 151992248}
   - component: {fileID: 151992251}
+  - component: {fileID: 151992252}
   m_Layer: 5
   m_Name: GridBackground
   m_TagString: Untagged
@@ -1146,6 +1147,19 @@ CanvasGroup:
   m_Interactable: 1
   m_BlocksRaycasts: 1
   m_IgnoreParentGroups: 0
+--- !u!114 &151992252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 151992246}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2538e39ee39be834e987755821b3cfa2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  columns: 7
 --- !u!1001 &163651533
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2329,6 +2343,11 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 151992247}
     m_Modifications:
+    - target: {fileID: 538936947985557273, guid: c608924486e3e514183f105e7992ae0b,
+        type: 3}
+      propertyPath: allowedType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3067450421656331510, guid: c608924486e3e514183f105e7992ae0b,
         type: 3}
       propertyPath: m_Pivot.x
@@ -3482,12 +3501,38 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 126838347}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &829749405 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7500968690405416296, guid: c608924486e3e514183f105e7992ae0b,
+    type: 3}
+  m_PrefabInstance: {fileID: 8177167068506007568}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &829749406 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 3067450421656331510, guid: c608924486e3e514183f105e7992ae0b,
     type: 3}
   m_PrefabInstance: {fileID: 8177167068506007568}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &829749411
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 829749405}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 306cc8c2b49d7114eaa3623786fc2126, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreLayout: 0
+  m_MinWidth: -1
+  m_MinHeight: -1
+  m_PreferredWidth: -1
+  m_PreferredHeight: -1
+  m_FlexibleWidth: -1
+  m_FlexibleHeight: -1
+  m_LayoutPriority: 1
 --- !u!1001 &835589011
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4750,9 +4795,9 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 0, y: -388.42413}
+  m_AnchoredPosition: {x: 0, y: -273.12}
   m_SizeDelta: {x: 100, y: 220.8995}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1043992177
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4765,7 +4810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00d3f2a017637d140aa088d773df69dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  allowedType: 1
+  allowedType: 0
 --- !u!225 &1043992178
 CanvasGroup:
   m_ObjectHideFlags: 0
@@ -6601,7 +6646,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a25c56ce3e0ca34db9cf3e5f7cbc482, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemData: {fileID: 0}
+  itemData: {fileID: 11400000, guid: 8594d53a118e78a4a95b8e43d304a91e, type: 2}
   parentAfterDrag: {fileID: 0}
 --- !u!225 &1562843837
 CanvasGroup:
@@ -9127,6 +9172,11 @@ PrefabInstance:
     serializedVersion: 2
     m_TransformParent: {fileID: 151992247}
     m_Modifications:
+    - target: {fileID: 538936947985557273, guid: c608924486e3e514183f105e7992ae0b,
+        type: 3}
+      propertyPath: allowedType
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3067450421656331510, guid: c608924486e3e514183f105e7992ae0b,
         type: 3}
       propertyPath: m_Pivot.x
