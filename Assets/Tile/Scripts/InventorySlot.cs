@@ -10,11 +10,11 @@ public class InventorySlot : MonoBehaviour, IDropHandler
         //peida kardan itemi ke dar hale drag shodan ast.
         InventoryItem newItem = eventData.pointerDrag.GetComponent<InventoryItem>();
 
-        if (newItem != null) 
+        if (newItem != null && newItem.itemData != null) 
         {
         
             // 1. aval check mikonim ke aya type item be in slot mikhore ya na.
-            if (newItem.type == allowedType)
+            if (newItem.itemData.type == allowedType)
             {
 
                 // 2.check mikonim aya slot khali hast ya na?

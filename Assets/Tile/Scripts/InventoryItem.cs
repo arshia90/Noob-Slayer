@@ -4,14 +4,14 @@ using UnityEngine.EventSystems;
 
 public class InventoryItem : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public ItemType type; 
+    public ItemData itemData;
     
     //in parenti hast ke item bad az drag bayad dar un gharar begire.
     [HideInInspector] public Transform parentAfterDrag;
     
     //bayad slot asli ro hamishe zakhire dashte bashim.
     private Transform originalSlot;
-    private CanvasGroup canvasGroup;
+    private CanvasGroup canvasGroup;   
 
     private void Awake()
     {
