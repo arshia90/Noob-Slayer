@@ -912,8 +912,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1218978924}
-  viewDistance: 30
-  viewAngle: 360
+  frontDistance: 20
+  frontAngle: 180
+  backDistance: 15
+  backAngle: 180
   rotateSpeed: 5
 --- !u!1 &391131297
 GameObject:

@@ -16,5 +16,5 @@ MonoBehaviour:
   Hp: 100
   Mana: 100
   Armor: 80
-  ActionPoints: 10
+  ActionPoints: 30
   Xp: 50

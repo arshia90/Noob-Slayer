@@ -1,14 +1,24 @@
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 public class EnemyVision : MonoBehaviour
 {
     public Transform player;
 
-    [Header("Vision")]
-    public float viewDistance = 5f;
+    [Header("Front Vision")]
+    public float frontDistance = 5f;
 
     [Range(0, 360)]
-    public float viewAngle = 120f;
+    public float frontAngle = 180f;
+
+    [Header("Back Vision")]
+    public float backDistance = 2f;
+
+    [Range(0, 360)]
+    public float backAngle = 180f;
 
     [Header("Rotation")]
     public float rotateSpeed = 5f;
@@ -23,21 +33,32 @@ public class EnemyVision : MonoBehaviour
         if (player == null)
             return;
 
-        // فاصله تا پلیر
-        float distance = Vector3.Distance(transform.position, player.position);
-
-        // اگر بیرون رنج بود
-        if (distance > viewDistance)
-            return;
-
         // جهت پلیر
-        Vector3 dirToPlayer = (player.position - transform.position).normalized;
+        Vector3 dirToPlayer =
+            (player.position - transform.position).normalized;
 
-        // زاویه بین جلو Enemy و پلیر
-        float angle = Vector3.Angle(transform.forward, dirToPlayer);
+        // فاصله تا پلیر
+        float distance =
+            Vector3.Distance(transform.position, player.position);
 
-        // اگر داخل زاویه دید بود
-        if (angle < viewAngle / 2f)
+        // زاویه دید جلو
+        float frontCheck =
+            Vector3.Angle(transform.forward, dirToPlayer);
+
+        // زاویه دید پشت
+        float backCheck =
+            Vector3.Angle(-transform.forward, dirToPlayer);
+
+        // دید جلو
+        if (distance <= frontDistance &&
+            frontCheck <= frontAngle / 2f)
+        {
+            RotateToPlayer();
+        }
+
+        // دید پشت
+        if (distance <= backDistance &&
+            backCheck <= backAngle / 2f)
         {
             RotateToPlayer();
         }
@@ -45,23 +66,66 @@ public class EnemyVision : MonoBehaviour
 
     void RotateToPlayer()
     {
-        Vector3 lookDir = player.position - transform.position;
+        Vector3 lookDir =
+            player.position - transform.position;
 
         lookDir.y = 0;
 
-        Quaternion targetRotation = Quaternion.LookRotation(lookDir);
+        Quaternion targetRotation =
+            Quaternion.LookRotation(lookDir);
 
         transform.rotation = Quaternion.Lerp(
             transform.rotation,
             targetRotation,
             Time.deltaTime * rotateSpeed
         );
-        
     }
-    void OnDrawGizmosSelected()
-{
-    Gizmos.color = Color.red;
 
-    Gizmos.DrawWireSphere(transform.position, viewDistance);
-}
+#if UNITY_EDITOR
+    void OnDrawGizmosSelected()
+    {
+        // ================= FRONT =================
+
+        Handles.color = new Color(1, 0, 0, 0.25f);
+
+        Vector3 frontLeft =
+            Quaternion.Euler(0, -frontAngle / 2, 0)
+            * transform.forward;
+
+        Handles.DrawSolidArc(
+            transform.position,
+            Vector3.up,
+            frontLeft,
+            frontAngle,
+            frontDistance
+        );
+
+        // ================= BACK =================
+
+        Handles.color = new Color(0, 0, 1, 0.25f);
+
+        Vector3 backDirection = -transform.forward;
+
+        Vector3 backLeft =
+            Quaternion.Euler(0, -backAngle / 2, 0)
+            * backDirection;
+
+        Handles.DrawSolidArc(
+            transform.position,
+            Vector3.up,
+            backLeft,
+            backAngle,
+            backDistance
+        );
+
+        // ================= FORWARD LINE =================
+
+        Gizmos.color = Color.green;
+
+        Gizmos.DrawLine(
+            transform.position,
+            transform.position + transform.forward * frontDistance
+        );
+    }
+#endif
 }
