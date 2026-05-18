@@ -15,3 +15,4 @@ MonoBehaviour:
   width: 1
   height: 2
   itemIcon: {fileID: 21300000, guid: 5adcc9206f1d38946b11def5cc6566e5, type: 3}
+  itemType: 3
