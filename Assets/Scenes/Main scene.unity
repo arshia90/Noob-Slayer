@@ -661,10 +661,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1218978924}
+  indexer: {fileID: 1218141253}
   frontDistance: 20
   frontAngle: 180
-  backDistance: 15
+  backDistance: 25
   backAngle: 180
+  loseDistance: 10
+  moveSpeed: 1
+  stopDistance: 1
   rotateSpeed: 5
 --- !u!1 &391131297
 GameObject:
@@ -3351,10 +3355,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1218978924}
+  indexer: {fileID: 1218141253}
   frontDistance: 15
   frontAngle: 180
   backDistance: 10
   backAngle: 180
+  loseDistance: 10
+  moveSpeed: 1
+  stopDistance: 1
   rotateSpeed: 5
 --- !u!1 &2096853331
 GameObject:
